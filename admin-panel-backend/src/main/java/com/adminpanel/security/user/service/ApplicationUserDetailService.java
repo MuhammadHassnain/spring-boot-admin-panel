@@ -19,8 +19,6 @@ public class ApplicationUserDetailService  implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		
 		return new User("admin",passwordEncoder.encode("admin"),new HashSet<SimpleGrantedAuthority>());
 	}
 	
