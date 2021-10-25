@@ -25,43 +25,49 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class User {
-	
-	
+
 	@Id
-	@Column(name = "users_id",nullable = false,unique = true)
+	@Column(name = "users_id", nullable = false, unique = true)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(name="user_email",nullable=false,unique=true)
+
+	@Column(name = "user_email", nullable = false, unique = true)
 	private String email;
-	
-	@Column(name="user_password",nullable=false)
+
+	@Column(name = "user_password", nullable = false)
 	private String password;
-	
-	
-	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-	@JoinTable(name = "user_authorities", 
-			joinColumns = @JoinColumn(name="user_id"),
-			inverseJoinColumns = @JoinColumn(name="authority_id"))
-	@Column(name="authority_id")
+
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
+	@Column(name = "authority_id")
 	private Set<Authority> authorities;
-	
-	@Column(name = "user_account_not_expired",nullable = false)
+
+	@Column(name = "user_account_not_expired", nullable = false)
 	private boolean accountNonExpired;
 
-	@Column(name = "user_account_not_locked",nullable = false)
+	@Column(name = "user_account_not_locked", nullable = false)
 	private boolean accountNonLocked;
 
-	@Column(name = "user_credentials_not_expired",nullable = false)
+	@Column(name = "user_credentials_not_expired", nullable = false)
 	private boolean credentialsNonExpired;
 
-	@Column(name = "user_enabled",nullable = false)
+	@Column(name = "user_enabled", nullable = false)
 	private boolean enabled;
-	
-	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_type_id" , referencedColumnName = "user_type_id")
+
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_type_id", referencedColumnName = "user_type_id")
 	private UserType userType;
 
-	
-	
+	public User(String email, String password, Set<Authority> authorities, boolean accountNonExpired,
+			boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled, UserType userType) {
+		this.email = email;
+		this.password = password;
+		this.authorities = authorities;
+		this.accountNonExpired = accountNonExpired;
+		this.accountNonLocked = accountNonLocked;
+		this.credentialsNonExpired = credentialsNonExpired;
+		this.enabled = enabled;
+		this.userType = userType;
+	}
+
 }

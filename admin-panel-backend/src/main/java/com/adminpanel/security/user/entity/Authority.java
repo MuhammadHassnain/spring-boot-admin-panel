@@ -28,10 +28,10 @@ public class Authority {
 	@Id
 	@Column(name = "authority_id", nullable = false,unique = true)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userTypeId;
-	
+	private Integer authorityId;
+
 	@Column(name = "authority_name", nullable = false , unique = true)
-	private String userTypeName;
+	private String authorityName;
 	
 	
 	
@@ -39,4 +39,13 @@ public class Authority {
 	@JoinColumn(name = "user_type_id" , referencedColumnName = "user_type_id")
 	private UserType userType;
 
+
+
+	public Authority(String authorityName, UserType userType) {
+		this.authorityName = authorityName;
+		this.userType = userType;
+	}
+
+	
+	
 }
