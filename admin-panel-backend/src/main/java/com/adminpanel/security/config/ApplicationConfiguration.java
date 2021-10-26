@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.adminpanel.exception.ExceptionHandlerFilter;
+import com.adminpanel.security.jwt.JwtManager;
+import com.adminpanel.security.jwt.filter.CustomUsernamePasswordAuthentication;
 import com.adminpanel.security.user.service.ApplicationUserDetailService;
 
 @EnableWebSecurity
@@ -16,15 +19,18 @@ public class ApplicationConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final PasswordEncoder passwordEncoder;
 	private final ApplicationUserDetailService userDetialService;
+	private final JwtManager jwtManager;
+	
 	
 	
 	
 	
 	@Autowired
-	public ApplicationConfiguration(PasswordEncoder passwordEncoder,ApplicationUserDetailService userDetialService) {
+	public ApplicationConfiguration(PasswordEncoder passwordEncoder,ApplicationUserDetailService userDetialService, JwtManager jwtManager) {
 		super();
 		this.passwordEncoder = passwordEncoder;
 		this.userDetialService = userDetialService;
+		this.jwtManager = jwtManager;
 	}
 
 
@@ -40,6 +46,10 @@ public class ApplicationConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers("/login").permitAll()
 			.anyRequest().authenticated();
+		
+		
+		http.addFilterBefore(new ExceptionHandlerFilter(),CustomUsernamePasswordAuthentication.class);
+		http.addFilter(new CustomUsernamePasswordAuthentication(jwtManager,authenticationManager()));
 
 	}
 

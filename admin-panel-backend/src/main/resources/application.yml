@@ -8,3 +8,9 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    
+    
+jwt:
+  secret: this is simple secret it will be changed so don't take it as final
+  expireInDays: 2
+  tokenPrefix: Bearer 
