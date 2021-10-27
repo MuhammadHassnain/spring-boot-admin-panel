@@ -22,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.adminpanel.exception.ApplicationException;
 import com.adminpanel.security.jwt.AuthenticationRequest;
-import com.adminpanel.security.jwt.JwtConfig;
 import com.adminpanel.security.jwt.JwtManager;
 import com.adminpanel.util.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;

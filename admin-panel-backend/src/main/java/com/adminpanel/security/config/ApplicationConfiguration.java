@@ -6,11 +6,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.adminpanel.exception.ExceptionHandlerFilter;
 import com.adminpanel.security.jwt.JwtManager;
 import com.adminpanel.security.jwt.filter.CustomUsernamePasswordAuthentication;
+import com.adminpanel.security.jwt.filter.UsernamePasswordAuthFilter;
 import com.adminpanel.security.user.service.ApplicationUserDetailService;
 
 @EnableWebSecurity
@@ -40,16 +43,18 @@ public class ApplicationConfiguration extends WebSecurityConfigurerAdapter {
 		
 		http.
 			csrf().disable()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.formLogin()
 			.usernameParameter("username").passwordParameter("password")
 			.and()
 			.authorizeRequests()
-			.antMatchers("/login").permitAll()
+			.antMatchers("/login","/").permitAll()
 			.anyRequest().authenticated();
 		
 		
 		http.addFilterBefore(new ExceptionHandlerFilter(),CustomUsernamePasswordAuthentication.class);
 		http.addFilter(new CustomUsernamePasswordAuthentication(jwtManager,authenticationManager()));
+		http.addFilterAfter(new UsernamePasswordAuthFilter(jwtManager), CustomUsernamePasswordAuthentication.class);
 
 	}
 
