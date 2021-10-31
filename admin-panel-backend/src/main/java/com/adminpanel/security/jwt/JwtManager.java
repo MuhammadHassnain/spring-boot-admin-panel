@@ -70,7 +70,6 @@ public class JwtManager {
 		tokenInfo.put("iat",Utils.formatDateTime(currDate));
 		tokenInfo.put("exp", Utils.formatDateTime(expireDate));
 		tokenInfo.put("tokenPrefix", jwtConfig.getTokenPrefix());
-		tokenInfo.put("username", username);
 		tokenInfo.put("authorities", authorities);
 		return tokenInfo;
 	}

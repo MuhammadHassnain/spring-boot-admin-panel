@@ -8,6 +8,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.adminpanel.admin.entity.Admin;
+import com.adminpanel.admin.service.AdminService;
 import com.adminpanel.security.user.entity.Authority;
 import com.adminpanel.security.user.entity.User;
 import com.adminpanel.security.user.entity.UserType;
@@ -23,6 +25,7 @@ public class RunAfterStartUp {
 	private final UserTypeService userTypeService;
 	private final AuthorityService authorityService;
 	private final PasswordEncoder passwordEncoder;
+	private final AdminService adminService;
 	
 	
 	
@@ -31,12 +34,14 @@ public class RunAfterStartUp {
 	
 	@Autowired
 	public RunAfterStartUp(UserService userService, UserTypeService userTypeService,
-			AuthorityService authorityService, PasswordEncoder passwordEncoder) {
+			AuthorityService authorityService, PasswordEncoder passwordEncoder,
+			AdminService adminService) {
 		super();
 		this.userService = userService;
 		this.userTypeService = userTypeService;
 		this.authorityService = authorityService;
 		this.passwordEncoder = passwordEncoder;
+		this.adminService = adminService;
 	}
 
 
@@ -64,7 +69,12 @@ public class RunAfterStartUp {
 		
 		User user = new User("test@test.com", passwordEncoder.encode("password"), authorities, true, true, true, true, adminType);
 		
-		userService.save(user);
+		user = userService.save(user);
+		
+		Admin admin = new Admin(user.getId(), "Muhammad", "Hassnain", null);
+		
+		admin = adminService.createAdmin(admin);
+		
 		
 		User user1 = userService.findUserByEmail("test@test.com");
 		
