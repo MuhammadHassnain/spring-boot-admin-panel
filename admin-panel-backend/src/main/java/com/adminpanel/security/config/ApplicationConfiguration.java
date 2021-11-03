@@ -11,13 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.adminpanel.admin.mapper.AdminMapper;
 import com.adminpanel.admin.service.AdminService;
 import com.adminpanel.exception.ExceptionHandlerFilter;
 import com.adminpanel.security.jwt.JwtManager;
 import com.adminpanel.security.jwt.filter.CustomUsernamePasswordAuthentication;
 import com.adminpanel.security.jwt.filter.UsernamePasswordAuthFilter;
+import com.adminpanel.security.mapper.ResponseMapper;
 import com.adminpanel.security.user.service.ApplicationUserDetailService;
 import com.adminpanel.security.user.service.UserService;
 
@@ -31,6 +32,7 @@ public class ApplicationConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired private AdminService adminService;
 	@Autowired private UserService userService;
+	@Autowired private ResponseMapper responseMapper;
 	
 	
 	
@@ -62,7 +64,7 @@ public class ApplicationConfiguration extends WebSecurityConfigurerAdapter {
 		
 		
 		http.addFilterBefore(new ExceptionHandlerFilter(),CustomUsernamePasswordAuthentication.class);
-		http.addFilter(new CustomUsernamePasswordAuthentication(jwtManager,authenticationManagerBean(),userService,adminService));
+		http.addFilter(new CustomUsernamePasswordAuthentication(jwtManager,authenticationManagerBean(),userService,adminService,responseMapper));
 		http.addFilterAfter(new UsernamePasswordAuthFilter(jwtManager), CustomUsernamePasswordAuthentication.class);
 
 	}
